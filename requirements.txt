@@ -1,0 +1,10 @@
+flask
+flask-sqlalchemy
+flask-login
+flask-cors
+feedparser
+beautifulsoup4
+requests
+psycopg2-binary
+python-dotenv
+gunicorn

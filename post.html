@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Title | T-Hub</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="posts.js"></script>
+</head>
+    <script src="posts.js"></script>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="reading-bar"></div>
+    </div>
+    <nav>
+        <div class="container nav-content">
+            <a href="index.html" class="logo">T-Hub</a>
+            
+            <div class="nav-links">
+                <a href="index.html">All</a>
+                <a href="#">Politics</a>
+                <a href="#">Tech</a>
+                <a href="#">Sports</a>
+                <a href="#">Lifestyle</a>
+            </div>
+
+            <div class="nav-right">
+                <button class="history-btn" id="history-open-btn">
+                    <span>🕒</span> History
+                </button>
+                <div id="auth-section"></div>
+                <span class="device-info" id="device-type">Detecting...</span>
+                <button class="mobile-toggle" id="mobile-toggle">
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+        <button class="drawer-close" id="drawer-close">&times;</button>
+        <a href="index.html" class="drawer-link">All</a>
+        <a href="#" class="drawer-link">Politics</a>
+        <a href="#" class="drawer-link">Tech</a>
+        <a href="#" class="drawer-link">Sports</a>
+        <a href="#" class="drawer-link">Lifestyle</a>
+    </div>
+
+    <div class="container">
+        <article class="post-detail">
+            <div class="post-container-inner">
+                <a href="index.html" class="back-btn">&larr; Back to Feed</a>
+                
+                <header class="post-header">
+                    <span class="post-category" id="post-category">Technology</span>
+                    <h1 class="post-title-large" id="post-title">Loading...</h1>
+                    <div class="post-meta">
+                        <span id="post-date">April 15, 2026</span>
+                        <span id="post-source">Source: T-Hub News</span>
+                    </div>
+                </header>
+            </div>
+
+            <div class="post-featured-image">
+                <img src="assets/placeholder.png" alt="Featured Image" id="post-image">
+            </div>
+
+                <div class="post-body" id="post-body" style="line-height: 1.8; font-size: 1.1rem; color: var(--text-secondary);">
+                    <p>Retrieving the latest details on this story. Please wait a moment...</p>
+                </div>
+                
+                <div id="source-fallback" style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.1); text-align: center; display:none;">
+                    <p style="color: var(--text-muted); margin-bottom: 1rem;">Continue reading this story at the original source:</p>
+                    <a href="#" id="original-link-btn" target="_blank" class="read-more" style="display:inline-block; padding: 1rem 2.5rem;">Read Original Article <span>&rarr;</span></a>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">T-Hub</a>
+                <p>Decoding the future of technology, one byte at a time. Your source for automated tech news and deep insights.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h3 class="footer-title">Categories</h3>
+                <ul>
+                    <li><a href="#">Politics</a></li>
+                    <li><a href="#">Tech</a></li>
+                    <li><a href="#">Sports</a></li>
+                    <li><a href="#">Lifestyle</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-newsletter">
+                <h3 class="footer-title">Join the Future</h3>
+                <p class="newsletter-desc">Get the latest tech innovations delivered straight to your inbox weekly.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 T-Hub Blog. All rights reserved. Powered by Automated AI Scraping.
+            </div>
+        </div>
+    </footer>
+
+    <!-- History Modal -->
+    <div class="history-overlay" id="history-overlay">
+        <div class="history-container">
+            <div class="history-header">
+                <h2>Reading History</h2>
+                <button class="clear-history" id="clear-history">Clear All</button>
+            </div>
+            <div class="history-list" id="history-list">
+                <!-- History items injected here -->
+            </div>
+            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;" id="history-close-btn">&times;</button>
+        </div>
+    </div>
+
+    <script>
+        // Device Detection
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            if (/iPhone|iPad|iPod/.test(ua)) return "iPhone";
+            if (/Android/.test(ua)) return "Android";
+            return "Desktop";
+        }
+        document.getElementById('device-type').textContent = getDeviceType();
+
+        // Mobile Drawer Toggle
+        const drawer = document.getElementById('mobile-drawer');
+        const toggle = document.getElementById('mobile-toggle');
+        const close = document.getElementById('drawer-close');
+
+        function toggleDrawer() {
+            drawer.classList.toggle('active');
+        }
+
+        toggle.onclick = toggleDrawer;
+        close.onclick = toggleDrawer;
+
+        // Dynamic Post Loading Logic
+        const API_BASE = 'http://localhost:5000/api';
+        
+        async function loadPost() {
+            const params = new URLSearchParams(window.location.search);
+            const postUrl = params.get('url');
+            const postId = params.get('id');
+
+            try {
+                const res = await fetch(`${API_BASE}/posts`);
+                const posts = await res.json();
+                
+                let post;
+                if (postId) {
+                    post = posts.find(p => p.id == postId);
+                } else {
+                    post = posts.find(p => p.link === postUrl);
+                }
+
+                if (post) {
+                    document.title = `${post.title} | T-Hub`;
+                    document.getElementById('post-title').textContent = post.title;
+                    document.getElementById('post-category').textContent = post.category || 'User Story';
+                    document.getElementById('post-date').textContent = post.is_user_post ? 'Recently Published' : 'RSS Feed';
+                    document.getElementById('post-source').textContent = `By ${post.author || 'System'}`;
+                    document.getElementById('post-image').src = post.image || 'assets/placeholder.png';
+                    document.getElementById('post-body').innerHTML = post.content || post.summary || post.excerpt;
+                    
+                    if (post.link && !post.is_user_post) {
+                        const fallback = document.getElementById('source-fallback');
+                        const linkBtn = document.getElementById('original-link-btn');
+                        fallback.style.display = 'block';
+                        linkBtn.href = post.link;
+                    }
+
+                    // Track reading history
+                    saveToHistory(post);
+                } else {
+                    document.getElementById('post-title').textContent = "Post not found";
+                }
+            } catch (error) {
+                console.error("Error loading post:", error);
+                document.getElementById('post-body').innerHTML = "<p>Error connecting to API. Ensure app.py is running.</p>";
+            }
+        }
+
+        loadPost();
+
+        // Reading Progress Tracking
+        window.onscroll = function() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("reading-bar").style.width = scrolled + "%";
+        };
+
+        // History Logic
+        function saveToHistory(post) {
+            let history = JSON.parse(localStorage.getItem('news_history') || '[]');
+            // Avoid duplicates
+            history = history.filter(item => item.link !== post.link);
+            history.push({
+                title: post.title,
+                link: post.link,
+                image: post.image,
+                source: post.source
+            });
+            // Keep last 10
+            if (history.length > 10) history.shift();
+            localStorage.setItem('news_history', JSON.stringify(history));
+        }
+
+        const historyOverlay = document.getElementById('history-overlay');
+        const historyList = document.getElementById('history-list');
+        const historyBtn = document.getElementById('history-open-btn');
+        const historyClose = document.getElementById('history-close-btn');
+        const clearBtn = document.getElementById('clear-history');
+
+        historyBtn.onclick = () => {
+            const history = JSON.parse(localStorage.getItem('news_history') || '[]');
+            historyList.innerHTML = history.length ? '' : '<p style="text-align:center; padding: 2rem; color:var(--text-muted);">No history found.</p>';
+            
+            history.reverse().forEach(item => {
+                const historyItem = document.createElement('a');
+                historyItem.href = `post.html?url=${encodeURIComponent(item.link)}`;
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `
+                    <img src="${item.image}" onerror="this.src='assets/placeholder.png'">
+                    <div class="history-item-info">
+                        <h4>${item.title}</h4>
+                        <span>${item.source}</span>
+                    </div>
+                `;
+                historyList.appendChild(historyItem);
+            });
+            historyOverlay.classList.add('active');
+        };
+
+        historyClose.onclick = () => historyOverlay.classList.remove('active');
+        
+        clearBtn.onclick = () => {
+            localStorage.removeItem('news_history');
+            historyList.innerHTML = '<p style="text-align:center; padding: 2rem; color:var(--text-muted);">History cleared.</p>';
+        };
+
+        window.onclick = (e) => {
+            if (e.target === historyOverlay) historyOverlay.classList.remove('active');
+        };
+    </script>
+</body>
+</html>

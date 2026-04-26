@@ -1,0 +1,38 @@
+[Thu 04/16/2026 18:34:14.36] Starting blog update... 
+Fetching: https://techcrunch.com/feed/
+Fetching: https://www.theverge.com/rss/index.xml
+Fetching: https://www.wired.com/feed/rss
+Sorting stories...
+[1/12] fetching deep content/image for: It’s not just you — Bluesky is (sorta) down
+[2/12] fetching deep content/image for: The nine best ways to protect, customize, and accessorize your MacBook Neo
+[3/12] fetching deep content/image for: Everything we like is a psyop
+[4/12] fetching deep content/image for: Google now lets you explore the web side-by-side with AI Mode
+[5/12] fetching deep content/image for: OpenAI’s big Codex update is a direct shot at Anthropic’s Claude Code
+[6/12] fetching deep content/image for: Google’s AI Mode update lets you open links without leaving the page
+[7/12] fetching deep content/image for: Google's AI Mode Update Tries to Kill Tab Hopping in Chrome
+[8/12] fetching deep content/image for: Two Americans sentenced for helping North Korea steal $5 million in fake IT worker scheme
+[9/12] fetching deep content/image for: InsightFinder raises $15M to help companies figure out where AI agents go wrong
+[10/12] fetching deep content/image for: Microsoft planning Surface Laptop with an OLED display
+[11/12] fetching deep content/image for: AI traffic to US retailers rose 393% in Q1, and it’s boosting their revenue too
+[12/12] fetching deep content/image for: Roblox’s AI assistant gets new agentic tools to plan, build, and test games
+Successfully processed 12 posts to posts.js (Last updated: April 16, 2026 at 18:34 PM)
+[Thu 04/16/2026 18:34:52.25] SUCCESS: Blog updated. 
+[Thu 04/16/2026 18:45:26.38] Starting blog update... 
+Fetching: https://techcrunch.com/feed/
+Fetching: https://www.theverge.com/rss/index.xml
+Fetching: https://www.wired.com/feed/rss
+Sorting stories...
+[1/12] fetching deep content/image for: The UK Launches Its $675 Million Sovereign AI Fund
+[2/12] fetching deep content/image for: It’s not just you — Bluesky is (sorta) down
+[3/12] fetching deep content/image for: The nine best ways to protect, customize, and accessorize your MacBook Neo
+[4/12] fetching deep content/image for: Everything we like is a psyop
+[5/12] fetching deep content/image for: Google now lets you explore the web side-by-side with AI Mode
+[6/12] fetching deep content/image for: OpenAI’s big Codex update is a direct shot at Anthropic’s Claude Code
+[7/12] fetching deep content/image for: Google’s AI Mode update lets you open links without leaving the page
+[8/12] fetching deep content/image for: Google's AI Mode Update Tries to Kill Tab Hopping in Chrome
+[9/12] fetching deep content/image for: Two Americans sentenced for helping North Korea steal $5 million in fake IT worker scheme
+[10/12] fetching deep content/image for: InsightFinder raises $15M to help companies figure out where AI agents go wrong
+[11/12] fetching deep content/image for: Microsoft planning Surface Laptop with an OLED display
+[12/12] fetching deep content/image for: AI traffic to US retailers rose 393% in Q1, and it’s boosting their revenue too
+Successfully processed 12 posts to posts.js (Last updated: April 16, 2026 at 18:45 PM)
+[Thu 04/16/2026 18:45:59.67] SUCCESS: Blog updated. 

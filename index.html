@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Tech Blog | The Future of Innovation</title>
+    <meta name="description" content="A self-updating tech blog powered by AI-driven RSS scraping.">
+    <link rel="stylesheet" href="styles.css">
+    <script src="posts.js"></script>
+</head>
+
+<body>
+    <nav>
+        <div class="container nav-content">
+            <a href="#" class="logo">T-Hub</a>
+
+            <div class="nav-links">
+                <a href="#" class="nav-link active" data-category="All">All</a>
+                <a href="#" class="nav-link" data-category="Politics">Politics</a>
+                <a href="#" class="nav-link" data-category="Tech">Tech</a>
+                <a href="#" class="nav-link" data-category="Sports">Sports</a>
+                <a href="#" class="nav-link" data-category="Lifestyle">Lifestyle</a>
+            </div>
+
+            <div class="nav-right">
+                <button class="history-btn" id="post-btn" style="display:none;">
+                    <span>✍️</span> Post
+                </button>
+                <div id="auth-section">
+                    <button class="history-btn" id="login-open-btn">
+                        Sign In
+                    </button>
+                </div>
+                <button class="history-btn" id="history-open-btn">
+                    <span>🕒</span> History
+                </button>
+                <span class="device-info" id="device-type">Detecting...</span>
+                <button class="mobile-toggle" id="mobile-toggle">
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="mobile-drawer" id="mobile-drawer">
+        <button class="drawer-close" id="drawer-close">&times;</button>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">All</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Politics</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Tech</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Sports</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Lifestyle</a>
+    </div>
+
+    <div class="container">
+        <header class="hero">
+            <h1>Latest News</h1>
+            <p>Exploring the frontier of technology, hardware, and breakthrough innovations automatically curated for you.</p>
+            <div class="system-status">
+                <span class="status-dot"></span>
+                Feed Status: <span id="last-updated">Live</span> • <span id="timestamp-val">Updating...</span>
+            </div>
+        </header>
+
+        <main class="blog-grid" id="blog-grid">
+            <!-- Dynamic posts will be injected here -->
+            <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">
+                <h3>Scanning for the latest innovations...</h3>
+            </div>
+        </main>
+
+    </div> <!-- closing .container for the main content -->
+
+    <footer>
+        <div class="container footer-grid">
+            <div class="footer-brand">
+                <a href="#" class="logo">T-Hub</a>
+                <p>Decoding the future of technology, one byte at a time. Your source for automated tech news and deep insights.</p>
+            </div>
+            
+            <div class="footer-links">
+                <h3 class="footer-title">Categories</h3>
+                <ul>
+                    <li><a href="#">Politics</a></li>
+                    <li><a href="#">Tech</a></li>
+                    <li><a href="#">Sports</a></li>
+                    <li><a href="#">Lifestyle</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-newsletter">
+                <h3 class="footer-title">Join the Future</h3>
+                <p class="newsletter-desc">Get the latest tech innovations delivered straight to your inbox weekly.</p>
+                <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Subscribed!');">
+                    <input type="email" placeholder="Enter your email" required>
+                    <button type="submit">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 T-Hub Blog. All rights reserved. Powered by Automated AI Scraping.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Auth Modals -->
+    <div class="history-overlay" id="auth-overlay">
+        <div class="history-container" style="max-width: 400px;">
+            <div class="history-header">
+                <h2 id="auth-title">Sign In</h2>
+                <button class="clear-history" id="auth-switch">Need an account?</button>
+            </div>
+            <form id="auth-form" style="display:flex; flex-direction:column; gap:1rem;">
+                <input type="text" id="auth-username" placeholder="Username" required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
+                <input type="password" id="auth-password" placeholder="Password" required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
+                <button type="submit" class="read-more" style="width:100%; padding:1rem; border:none; cursor:pointer;">Continue</button>
+            </form>
+            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;" id="auth-close-btn">&times;</button>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div class="history-overlay" id="post-overlay">
+        <div class="history-container" style="max-width: 600px;">
+            <div class="history-header">
+                <h2>Publish a Story</h2>
+            </div>
+            <form id="post-form" style="display:flex; flex-direction:column; gap:1rem;">
+                <input type="text" id="post-title-in" placeholder="Story Title" required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
+                <textarea id="post-content-in" placeholder="Tell your story..." required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px; height:200px; font-family:inherit;"></textarea>
+                <button type="submit" class="read-more" style="width:100%; padding:1rem; border:none; cursor:pointer;">Publish Now</button>
+            </form>
+            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;" id="post-close-btn">&times;</button>
+        </div>
+    </div>
+    <script>
+        // Device Detection
+        function getDeviceType() {
+            const ua = navigator.userAgent;
+            if (/iPhone|iPad|iPod/.test(ua)) return "iPhone";
+            if (/Android/.test(ua)) return "Android";
+            if (/Mobile|BlackBerry|IEMobile|Kindle|Silk-Accelerated/.test(ua)) return "Mobile";
+            return "Desktop";
+        }
+        document.getElementById('device-type').textContent = getDeviceType();
+
+        // Mobile Drawer Toggle
+        const drawer = document.getElementById('mobile-drawer');
+        const toggle = document.getElementById('mobile-toggle');
+        const close = document.getElementById('drawer-close');
+
+        function toggleDrawer() {
+            drawer.classList.toggle('active');
+        }
+
+        toggle.onclick = toggleDrawer;
+        close.onclick = toggleDrawer;
+
+        // Navigation & Filtering
+        let currentCategory = 'All';
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                navLinks.forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+                currentCategory = link.getAttribute('data-category');
+                loadPosts();
+            });
+        });
+
+        // API Config
+        const API_BASE = 'http://localhost:5000/api';
+        let currentUser = null;
+
+        // Dynamic Data Integration
+        async function loadPosts() {
+            try {
+                const response = await fetch(`${API_BASE}/posts`, {credentials: 'include'});
+                const posts = await response.json();
+                
+                let filtered = posts;
+                if (currentCategory !== 'All') {
+                    filtered = posts.filter(p => p.category === currentCategory);
+                }
+                renderPosts(filtered);
+            } catch (error) {
+                console.error("Error loading news:", error);
+                document.getElementById('blog-grid').innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--text-muted);">Failed to load latest news. Ensure app.py is running.</p>';
+            }
+        }
+
+        function renderPosts(posts) {
+            const grid = document.getElementById('blog-grid');
+            grid.innerHTML = ''; // Clear loading state
+
+            posts.forEach(post => {
+                const card = document.createElement('article');
+                card.className = 'blog-card';
+                
+                const detailUrl = post.is_user_post ? `post.html?id=${post.id}` : `post.html?url=${encodeURIComponent(post.link)}`;
+
+                card.innerHTML = `
+                    <div class="blog-card-image">
+                        <img src="${post.image}" alt="${post.title}" onerror="this.src='assets/placeholder.png'">
+                    </div>
+                    <div class="blog-content">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <span style="font-size: 0.7rem; color: var(--accent-primary); font-weight: 700; text-transform: uppercase;">${post.source}</span>
+                            <button class="like-btn ${post.liked ? 'active' : ''}" onclick="toggleLike(${post.id}, this)" style="background:none; border:none; cursor:pointer; font-size:1rem; color: ${post.liked ? '#ff4757' : 'var(--text-muted)'};">
+                                ❤️ <span class="like-count">${post.likes_count}</span>
+                            </button>
+                        </div>
+                        <h2 class="blog-title">${post.title}</h2>
+                        <p class="blog-excerpt">${post.excerpt}</p>
+                        <a href="${detailUrl}" class="read-more">Read More <span>&rarr;</span></a>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        loadPosts();
+
+        // History Logic (Re-implemented for compatibility)
+        const historyOverlay = document.getElementById('history-overlay');
+        const historyList = document.getElementById('history-list');
+        const historyBtn = document.getElementById('history-open-btn');
+        const historyClose = document.getElementById('history-close-btn');
+        const clearBtn = document.getElementById('clear-history');
+
+        historyBtn.onclick = () => {
+            const history = JSON.parse(localStorage.getItem('news_history') || '[]');
+            historyList.innerHTML = history.length ? '' : '<p style="text-align:center; padding: 2rem; color:var(--text-muted);">No history found.</p>';
+            history.reverse().forEach(item => {
+                const historyItem = document.createElement('a');
+                historyItem.href = item.is_user_post ? `post.html?id=${item.id}` : `post.html?url=${encodeURIComponent(item.link)}`;
+                historyItem.className = 'history-item';
+                historyItem.innerHTML = `<img src="${item.image}" onerror="this.src='assets/placeholder.png'"><div class="history-item-info"><h4>${item.title}</h4><span>${item.source}</span></div>`;
+                historyList.appendChild(historyItem);
+            });
+            historyOverlay.classList.add('active');
+        };
+        historyClose.onclick = () => historyOverlay.classList.remove('active');
+        clearBtn.onclick = () => { localStorage.removeItem('news_history'); document.getElementById('history-list').innerHTML = ''; };
+
+        // Community Logic (Auth/Post/Like)
+        const authOverlay = document.getElementById('auth-overlay');
+        const authForm = document.getElementById('auth-form');
+        const authTitle = document.getElementById('auth-title');
+        const authSwitch = document.getElementById('auth-switch');
+        const loginOpenBtn = document.getElementById('login-open-btn');
+        const postOverlay = document.getElementById('post-overlay');
+        const postForm = document.getElementById('post-form');
+        const postBtn = document.getElementById('post-btn');
+        let isLogin = true;
+
+        async function updateAuthUI() {
+            try {
+                const res = await fetch(`${API_BASE}/auth/me`);
+                const data = await res.json();
+                if (data.username) {
+                    currentUser = data;
+                    document.getElementById('auth-section').innerHTML = `
+                        <span style="font-size:0.8rem; color:var(--accent-primary);">@${data.username}</span>
+                        <button class="clear-history" onclick="logout()" style="margin-left:0.5rem;">Sign Out</button>
+                    `;
+                    postBtn.style.display = 'flex';
+                } else {
+                    currentUser = null;
+                }
+            } catch (e) {}
+        }
+
+        // Open Auth (Sign In)
+        document.addEventListener('click', (e) => {
+            if (e.target.id === 'login-open-btn') {
+                isLogin = true;
+                authOverlay.classList.add('active');
+                authTitle.textContent = "Sign In";
+            }
+        });
+
+        document.getElementById('auth-close-btn').onclick = () => authOverlay.classList.remove('active');
+        
+        authSwitch.onclick = () => {
+            isLogin = !isLogin;
+            authTitle.textContent = isLogin ? "Sign In" : "Create Account";
+            authSwitch.textContent = isLogin ? "Need an account?" : "Have an account?";
+        };
+
+        authForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const endpoint = isLogin ? '/auth/login' : '/auth/register';
+            const res = await fetch(API_BASE + endpoint, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    username: document.getElementById('auth-username').value,
+                    password: document.getElementById('auth-password').value
+                })
+            });
+            const data = await res.json();
+            if (data.success) {
+                authOverlay.classList.remove('active');
+                if (isLogin) {
+                    location.reload();
+                } else {
+                    alert("Account created! You can now sign in.");
+                    isLogin = true;
+                    authTitle.textContent = "Sign In";
+                }
+            } else {
+                alert(data.error || "Authentication failed");
+            }
+        };
+
+        window.logout = async () => {
+            await fetch(`${API_BASE}/auth/logout`, {method: 'POST'});
+            location.reload();
+        };
+
+        postBtn.onclick = () => postOverlay.classList.add('active');
+        document.getElementById('post-close-btn').onclick = () => postOverlay.classList.remove('active');
+
+        postForm.onsubmit = async (e) => {
+            e.preventDefault();
+            const res = await fetch(`${API_BASE}/posts/create`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    title: document.getElementById('post-title-in').value,
+                    content: document.getElementById('post-content-in').value
+                })
+            });
+            if (res.ok) {
+                location.reload();
+            }
+        };
+
+        window.toggleLike = async (postId, btn) => {
+            if (!currentUser) {
+                authOverlay.classList.add('active');
+                return;
+            }
+            const res = await fetch(`${API_BASE}/posts/like`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({post_id: postId})
+            });
+            const data = await res.json();
+            const countSpan = btn.querySelector('.like-count');
+            countSpan.textContent = data.count;
+            btn.style.color = data.status === 'liked' ? '#ff4757' : 'var(--text-muted)';
+        };
+
+        updateAuthUI();
+
+        // Spotlight Effect (Delegated/Updated)
+        document.getElementById('blog-grid').onmousemove = e => {
+            const cards = document.getElementsByClassName('blog-card');
+            for (const card of cards) {
+                const rect = card.getBoundingClientRect(),
+                    x = e.clientX - rect.left,
+                    y = e.clientY - rect.top;
+                card.style.setProperty('--mouse-x', `${x}px`);
+                card.style.setProperty('--mouse-y', `${y}px`);
+            }
+        }
+    </script>
+</body>
+
+</html>
