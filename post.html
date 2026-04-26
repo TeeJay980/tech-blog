@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Post Title | T-Hub</title>
+    <title>Article | T-Hub News</title>
+    
+    <!-- Open Graph / Social Sharing -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" id="og-title" content="T-Hub Latest Insight">
+    <meta property="og:image" id="og-image-tag" content="assets/placeholder.png">
+
     <link rel="stylesheet" href="styles.css">
-    <script src="posts.js"></script>
-</head>
-    <script src="posts.js"></script>
 </head>
 <body>
     <div class="progress-container">
@@ -56,9 +59,14 @@
                 <header class="post-header">
                     <span class="post-category" id="post-category">Technology</span>
                     <h1 class="post-title-large" id="post-title">Loading...</h1>
-                    <div class="post-meta">
-                        <span id="post-date">April 15, 2026</span>
-                        <span id="post-source">Source: T-Hub News</span>
+                    <div class="post-meta" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                            <span id="post-date">April 15, 2026</span>
+                            <span id="post-source">Source: T-Hub News</span>
+                        </div>
+                        <button onclick="shareStory()" style="background:var(--accent-primary); color:white; border:none; padding: 0.5rem 1rem; border-radius: 5px; cursor:pointer; font-weight:bold;">
+                            Share Link 🔗
+                        </button>
                     </div>
                 </header>
             </div>
@@ -257,6 +265,18 @@
         window.onclick = (e) => {
             if (e.target === historyOverlay) historyOverlay.classList.remove('active');
         };
+
+        function shareStory() {
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('post-title').textContent,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                navigator.clipboard.writeText(window.location.href);
+                alert("Link copied to clipboard!");
+            }
+        }
     </script>
 </body>
 </html>
