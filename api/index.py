@@ -162,9 +162,19 @@ def toggle_like():
     db.session.commit()
     return jsonify({"status": status, "count": post.likes_count})
 
-# Initialize Database
-with app.app_context():
-    db.create_all()
+@app.route('/api/health')
+def health():
+    return jsonify({
+        "status": "online",
+        "database": "connected" if os.environ.get('DATABASE_URL') else "local-sqlite"
+    })
+
+# Initialize Database safely
+try:
+    with app.app_context():
+        db.create_all()
+except Exception as e:
+    print(f"Database initialization error: {e}")
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)
