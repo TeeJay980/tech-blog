@@ -714,13 +714,18 @@ footer {
     to { opacity: 1; }
 }
 
-@media (max-width: 768px) {
-    .post-title-large {
-        font-size: 2.5rem;
+@media (max-width: 968px) {
+    .nav-links, .device-info, #history-open-btn {
+        display: none !important;
     }
-    
-    .post-detail {
-        padding-top: 3rem;
+    .mobile-toggle {
+        display: flex !important;
+    }
+    .logo {
+        font-size: 1.1rem;
+    }
+    .footer-grid {
+        grid-template-columns: 1fr;
     }
 }
 

@@ -98,30 +98,35 @@ def get_me():
 
 @app.route('/api/posts', methods=['GET'])
 def get_posts():
-    posts = Post.query.order_by(Post.created_at.desc()).all()
-    output = []
-    for post in posts:
-        # Check if current user liked it
-        liked = False
-        if current_user.is_authenticated:
-            liked = Like.query.filter_by(user_id=current_user.id, post_id=post.id).first() is not None
-        
-        output.append({
-            "id": post.id,
-            "title": post.title,
-            "link": post.link or f"/api/posts/{post.id}", # Local link for user posts
-            "summary": post.summary,
-            "excerpt": post.excerpt,
-            "content": post.content,
-            "image": post.image,
-            "source": post.source,
-            "category": post.category,
-            "is_user_post": post.is_user_post,
-            "likes_count": post.likes_count,
-            "liked": liked,
-            "author": post.author.username if post.author else "System"
-        })
-    return jsonify(output)
+    try:
+        posts = Post.query.order_by(Post.created_at.desc()).all()
+        output = []
+        for post in posts:
+            liked = False
+            if current_user.is_authenticated:
+                try:
+                    liked = Like.query.filter_by(user_id=current_user.id, post_id=post.id).first() is not None
+                except:
+                    liked = False
+            
+            output.append({
+                "id": post.id,
+                "title": post.title,
+                "link": post.link or f"/post.html?id={post.id}", 
+                "summary": post.summary,
+                "excerpt": post.excerpt,
+                "content": post.content,
+                "image": post.image,
+                "source": post.source,
+                "category": post.category,
+                "is_user_post": post.is_user_post,
+                "likes_count": post.likes_count,
+                "liked": liked,
+                "author": post.author.username if (post.author and hasattr(post.author, 'username')) else "System"
+            })
+        return jsonify(output)
+    except Exception as e:
+        return jsonify({"error": str(e), "msg": "Database query failed"}), 500
 
 @app.route('/api/posts/create', methods=['POST'])
 @login_required
