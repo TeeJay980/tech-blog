@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, session
+from flask import Flask, request, jsonify, session, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -169,7 +169,14 @@ def health():
         "database": "connected" if os.environ.get('DATABASE_URL') else "local-sqlite"
     })
 
-# Initialize Database safely
+@app.route('/')
+def index():
+    return send_from_directory('../', 'index.html')
+
+@app.route('/<path:path>')
+def catch_all(path):
+    # Try to serve the file from the root directory
+    return send_from_directory('../', path)
 try:
     with app.app_context():
         db.create_all()
