@@ -7,19 +7,24 @@ echo ==========================================
 :: Change to project directory
 cd /d "c:\Users\Kid\Documents\Github\Tech blog"
 
-:: Check if the server is already running? (Optional)
-:: For now, just start it in a separate window
+:: Install dependencies if needed
+echo Checking dependencies...
+pip install -r requirements.txt --quiet
+
+:: Optional: Run scraper to get fresh local data
+echo Fetching latest news stories...
+python scraper.py
+
 echo Starting Local Python Backend...
-start "T-Hub Platform Server" cmd /c "C:\Users\Kid\AppData\Local\Programs\Python\Python312\python.exe app.py"
+start "T-Hub Platform Server" cmd /c "python api/index.py"
 
 :: Wait for server to boot
-timeout /t 3 /nobreak > nul
+timeout /t 5 /nobreak > nul
 
-:: Open the frontend
+:: Open the frontend via the local server
 echo Opening T-Hub Social...
-start index.html
+start http://localhost:5000
 
-echo Platform is now live! 
-echo Keep the [T-Hub Platform Server] window open to use Social features.
+echo Platform is now live at http://localhost:5000! 
 echo ==========================================
 pause

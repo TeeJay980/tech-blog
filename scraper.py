@@ -207,17 +207,23 @@ def scrape():
                 cat = item['category']
                 link = entry.get('link', '#')
                 
-                # Skip if already in DB
-                if Post.query.filter_by(link=link).first():
-                    print(f"[{cat}] skipping (already in DB): {entry.get('title', 'Untitled')}")
-                    continue
-
-                print(f"[{cat}] [{i+1}/12] fetching deep content for: {entry.get('title', 'Untitled')}")
+                # Check if already in DB
+                existing_post = Post.query.filter_by(link=link).first()
                 
+                print(f"[{cat}] [{i+1}/12] fetching deep content for: {entry.get('title', 'Untitled')}")
                 full_content, web_image = fetch_full_content_and_image(link)
                 summary_raw = entry.get('summary', '') or entry.get('description', '')
                 rss_image = extract_image(entry)
                 
+                if existing_post:
+                    # Update if current content is much shorter than the new full content
+                    if full_content and (not existing_post.content or len(full_content) > len(existing_post.content) + 100):
+                        print(f"  -> Updating existing post with fuller content ({len(full_content)} chars)")
+                        existing_post.content = full_content
+                        if web_image: existing_post.image = web_image
+                        db.session.commit()
+                    continue
+
                 new_post = Post(
                     title=entry.get('title', 'Untitled'),
                     link=link,

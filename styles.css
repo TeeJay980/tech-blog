@@ -761,3 +761,8 @@ footer {
         font-size: 2.5rem;
     }
 }
+/* Premium Reading Experience */
+.post-detail { padding-top: 4rem; max-width: 800px; margin: 0 auto; }
+.post-body { font-size: 1.15rem; line-height: 1.9; color: #e2e8f0; margin-top: 2rem; }
+.post-body p { margin-bottom: 2rem; }
+.post-title-large { font-size: 3rem; line-height: 1.1; margin: 1.5rem 0; font-weight: 800; }
