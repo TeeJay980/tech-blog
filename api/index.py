@@ -113,9 +113,7 @@ def get_posts():
                 "id": post.id,
                 "title": post.title,
                 "link": post.link or f"/post.html?id={post.id}", 
-                "summary": post.summary,
                 "excerpt": post.excerpt,
-                "content": post.content,
                 "image": post.image,
                 "source": post.source,
                 "category": post.category,
@@ -127,6 +125,40 @@ def get_posts():
         return jsonify(output)
     except Exception as e:
         return jsonify({"error": str(e), "msg": "Database query failed"}), 500
+
+@app.route('/api/posts/<int:post_id>', methods=['GET'])
+def get_post(post_id):
+    try:
+        post = Post.query.get(post_id)
+        if not post:
+            return jsonify({"error": "Post not found"}), 404
+
+        liked = False
+        if current_user.is_authenticated:
+            liked = Like.query.filter_by(user_id=current_user.id, post_id=post.id).first() is not None
+
+        return jsonify({
+            "id": post.id,
+            "title": post.title,
+            "content": post.content or post.summary or post.excerpt,
+            "image": post.image,
+            "category": post.category,
+            "author": post.author.username if (post.author and hasattr(post.author, 'username')) else "System",
+            "is_user_post": post.is_user_post,
+            "link": post.link,
+            "likes_count": post.likes_count,
+            "liked": liked
+        })
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route('/api/posts/detail', methods=['GET'])
+def get_post_by_url():
+    url = request.args.get('url')
+    if not url: return jsonify({"error": "URL required"}), 400
+    post = Post.query.filter_by(link=url).first()
+    if not post: return jsonify({"error": "Post not found"}), 404
+    return get_post(post.id)
 
 @app.route('/api/posts/create', methods=['POST'])
 @login_required
