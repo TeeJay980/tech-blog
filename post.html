@@ -47,11 +47,14 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
         <button class="drawer-close" id="drawer-close">&times;</button>
-        <a href="index.html" class="drawer-link">All</a>
-        <a href="#" class="drawer-link">Politics</a>
-        <a href="#" class="drawer-link">Tech</a>
-        <a href="#" class="drawer-link">Sports</a>
-        <a href="#" class="drawer-link">Lifestyle</a>
+        <div id="mobile-auth-section" style="margin-bottom: 2rem; width: 100%; text-align: center;">
+            <!-- Will be populated by JS -->
+        </div>
+        <a href="index.html" class="drawer-link" onclick="toggleDrawer()">All</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Politics</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Tech</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Sports</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer()">Lifestyle</a>
     </div>
 
     <div class="container">
@@ -264,6 +267,45 @@
             localStorage.removeItem('news_history');
             historyList.innerHTML = '<p style="text-align:center; padding: 2rem; color:var(--text-muted);">History cleared.</p>';
         };
+
+        const API_BASE = '/api';
+
+        async function updateAuthUI() {
+            try {
+                const res = await fetch(`${API_BASE}/auth/me`);
+                const data = await res.json();
+                const desktopAuth = document.getElementById('auth-section');
+                const mobileAuth = document.getElementById('mobile-auth-section');
+                
+                if (data.username) {
+                    const profileHTML = `
+                        <span style="font-size:0.8rem; color:var(--accent-primary);">@${data.username}</span>
+                        <button class="clear-history" onclick="logout()" style="margin-left:0.5rem;">Sign Out</button>
+                    `;
+                    desktopAuth.innerHTML = profileHTML;
+                    mobileAuth.innerHTML = profileHTML;
+                } else {
+                    const loginHTML = `<button class="history-btn" id="login-open-btn">Sign In</button>`;
+                    desktopAuth.innerHTML = loginHTML;
+                    mobileAuth.innerHTML = loginHTML;
+                }
+            } catch (e) {}
+        }
+
+        // Open Auth (Sign In) - Robust Delegation
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('#login-open-btn')) {
+                // Redirect to homepage for auth
+                window.location.href = 'index.html?auth=true';
+            }
+        });
+
+        window.logout = async () => {
+            await fetch(`${API_BASE}/auth/logout`, {method: 'POST'});
+            location.reload();
+        };
+
+        updateAuthUI();
 
         window.onclick = (e) => {
             if (e.target === historyOverlay) historyOverlay.classList.remove('active');

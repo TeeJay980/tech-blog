@@ -63,11 +63,14 @@
 
     <div class="mobile-drawer" id="mobile-drawer">
         <button class="drawer-close" id="drawer-close">&times;</button>
-        <a href="#" class="drawer-link" onclick="toggleDrawer()">All</a>
-        <a href="#" class="drawer-link" onclick="toggleDrawer()">Politics</a>
-        <a href="#" class="drawer-link" onclick="toggleDrawer()">Tech</a>
-        <a href="#" class="drawer-link" onclick="toggleDrawer()">Sports</a>
-        <a href="#" class="drawer-link" onclick="toggleDrawer()">Lifestyle</a>
+        <div id="mobile-auth-section" style="margin-bottom: 2rem; width: 100%; text-align: center;">
+            <!-- Will be populated by JS -->
+        </div>
+        <a href="#" class="drawer-link" onclick="toggleDrawer(); setCategory('All')">All</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer(); setCategory('Politics')">Politics</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer(); setCategory('Tech')">Tech</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer(); setCategory('Sports')">Sports</a>
+        <a href="#" class="drawer-link" onclick="toggleDrawer(); setCategory('Lifestyle')">Lifestyle</a>
     </div>
 
     <div class="container">
@@ -280,27 +283,45 @@
             try {
                 const res = await fetch(`${API_BASE}/auth/me`);
                 const data = await res.json();
+                const desktopAuth = document.getElementById('auth-section');
+                const mobileAuth = document.getElementById('mobile-auth-section');
+
                 if (data.username) {
                     currentUser = data;
-                    document.getElementById('auth-section').innerHTML = `
+                    const profileHTML = `
                         <span style="font-size:0.8rem; color:var(--accent-primary);">@${data.username}</span>
                         <button class="clear-history" onclick="logout()" style="margin-left:0.5rem;">Sign Out</button>
                     `;
+                    desktopAuth.innerHTML = profileHTML;
+                    mobileAuth.innerHTML = profileHTML;
                     postBtn.style.display = 'flex';
                 } else {
                     currentUser = null;
+                    const loginHTML = `<button class="history-btn" id="login-open-btn">Sign In</button>`;
+                    desktopAuth.innerHTML = loginHTML;
+                    mobileAuth.innerHTML = loginHTML;
+                    postBtn.style.display = 'none';
                 }
             } catch (e) {}
         }
 
-        // Open Auth (Sign In)
+        // Open Auth (Sign In) - Robust Delegation
         document.addEventListener('click', (e) => {
-            if (e.target.id === 'login-open-btn') {
+            if (e.target.closest('#login-open-btn')) {
                 isLogin = true;
                 authOverlay.classList.add('active');
                 authTitle.textContent = "Sign In";
+                if (drawer.classList.contains('active')) toggleDrawer();
             }
         });
+
+        window.setCategory = (cat) => {
+            currentCategory = cat;
+            navLinks.forEach(l => {
+                l.classList.toggle('active', l.getAttribute('data-category') === cat);
+            });
+            loadPosts();
+        };
 
         document.getElementById('auth-close-btn').onclick = () => authOverlay.classList.remove('active');
         
@@ -376,6 +397,14 @@
         };
 
         updateAuthUI();
+
+        // Handle redirect from article pages
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('auth')) {
+            isLogin = true;
+            authOverlay.classList.add('active');
+            authTitle.textContent = "Sign In";
+        }
 
         // Spotlight Effect (Delegated/Updated)
         document.getElementById('blog-grid').onmousemove = e => {
