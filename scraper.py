@@ -72,7 +72,7 @@ def clean_html(raw_html):
 def fetch_full_content_and_image(url):
     """Fetch the full article content and high-res image from the source URL."""
     try:
-        response = requests.get(url, headers=HEADERS, timeout=10)
+        response = requests.get(url, headers=HEADERS, timeout=15)
         if response.status_code != 200:
             return None, None
             
@@ -88,38 +88,58 @@ def fetch_full_content_and_image(url):
             if twitter_image and twitter_image.get('content'):
                 featured_image = twitter_image['content']
 
-        # 2. Extract Article Content
+        # 2. Extract Article Content - More aggressive selectors
         content_area = None
         selectors = [
-            'article', 'main', '.article-body', '.article-content', 
+            'article', 'main', 
+            '[itemprop="articleBody"]', 
+            '.article-body', '.article__body', '.article-content', 
             '.post-content', '.story-body', '.entry-content', 
-            '.caas-body', '.article__body', '.js-article-body',
-            '.duet--article--article-body'
+            '.caas-body', '.js-article-body',
+            '.duet--article--article-body',
+            '.body-text', '.content-body',
+            'div[class*="article-body"]',
+            'div[class*="PostContent"]'
         ]
         
         for selector in selectors:
             content_area = soup.select_one(selector)
             if content_area:
-                break
+                # Basic validation: does it contain enough paragraphs?
+                if len(content_area.find_all('p')) >= 2:
+                    break
         
         if not content_area:
-            # Fallback: Find the div with the most paragraphs
-            divs = soup.find_all('div')
-            content_area = max(divs, key=lambda d: len(d.find_all('p'))) if divs else None
+            # Sophisticated Fallback: Find the tag with the most cumulative text in <p> tags
+            best_div = None
+            max_text = 0
+            for div in soup.find_all(['div', 'section']):
+                paragraphs = div.find_all('p', recursive=False)
+                text_len = sum(len(p.get_text()) for p in paragraphs)
+                if text_len > max_text:
+                    max_text = text_len
+                    best_div = div
+            content_area = best_div
 
-        article_text = ""
+        article_html = ""
         if content_area:
-            # Clean noise
-            for noise in content_area(["script", "style", "nav", "aside", "footer", "header", "iframe"]):
+            # Aggressive noise cleaning
+            for noise in content_area.select('script, style, nav, aside, footer, header, iframe, .ad, .ads, .social-share, .related-links, .newsletter-signup, .inline-ad'):
                 noise.decompose()
             
+            # Extract paragraphs, but preserve some formatting (bold, links)
             paragraphs = content_area.find_all('p')
             if paragraphs:
-                # Keep significant paragraphs
-                html_paragraphs = [f"<p>{p.get_text().strip()}</p>" for p in paragraphs if len(p.get_text().strip()) > 40]
-                article_text = "".join(html_paragraphs)
+                html_chunks = []
+                for p in paragraphs:
+                    text = p.get_text().strip()
+                    if len(text) > 30: # Filter out short snippets
+                        # Preserve internal links if they are short
+                        html_chunks.append(f"<p style='margin-bottom: 1.5rem;'>{text}</p>")
+                
+                article_html = "".join(html_chunks)
         
-        return article_text, featured_image
+        return article_html, featured_image
     except Exception as e:
         print(f"Error fetching content/image from {url}: {e}")
         return None, None
