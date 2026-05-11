@@ -5,20 +5,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>T-Hub News | Autonomous Tech & Social Community</title>
-    <meta name="description" content="The future of tech news. Explore automated insights and join a community of innovators.">
-    
+    <meta name="description"
+        content="The future of tech news. Explore automated insights and join a community of innovators.">
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://tech-blog-teejay980.vercel.app/">
     <meta property="og:title" content="T-Hub News | Autonomous Tech & Social Community">
-    <meta property="og:description" content="The future of tech news. Explore automated insights and join a community of innovators.">
+    <meta property="og:description"
+        content="The future of tech news. Explore automated insights and join a community of innovators.">
     <meta property="og:image" content="https://tech-blog-teejay980.vercel.app/assets/og-image.png">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://tech-blog-teejay980.vercel.app/">
     <meta property="twitter:title" content="T-Hub News | Autonomous Tech & Social Community">
-    <meta property="twitter:description" content="The future of tech news. Explore automated insights and join a community of innovators.">
+    <meta property="twitter:description"
+        content="The future of tech news. Explore automated insights and join a community of innovators.">
     <meta property="twitter:image" content="https://tech-blog-teejay980.vercel.app/assets/og-image.png">
 
     <link rel="stylesheet" href="styles.css">
@@ -28,7 +31,8 @@
     <nav>
         <div class="container nav-content">
             <a href="#" class="logo">
-                <img src="assets/logo.png" alt="T-Hub Logo" style="height: 32px; width: auto; vertical-align: middle; margin-right: 8px; border-radius: 6px;">
+                <img src="assets/logo.png" alt="T-Hub Logo"
+                    style="height: 32px; width: auto; vertical-align: middle; margin-right: 8px; border-radius: 6px;">
                 T-Hub
             </a>
 
@@ -76,7 +80,8 @@
     <div class="container">
         <header class="hero">
             <h1>Latest News</h1>
-            <p>Exploring the frontier of technology, hardware, and breakthrough innovations automatically curated for you.</p>
+            <p>Exploring the frontier of technology, hardware, and breakthrough innovations automatically curated for
+                you.</p>
             <div class="system-status">
                 <span class="status-dot"></span>
                 Feed Status: <span id="last-updated">Live</span> • <span id="timestamp-val">Updating...</span>
@@ -85,7 +90,8 @@
 
         <main class="blog-grid" id="blog-grid">
             <!-- Dynamic posts will be injected here -->
-            <div class="loading-state" style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">
+            <div class="loading-state"
+                style="grid-column: 1/-1; text-align: center; padding: 4rem; color: var(--text-muted);">
                 <h3>Scanning for the latest innovations...</h3>
             </div>
         </main>
@@ -96,9 +102,10 @@
         <div class="container footer-grid">
             <div class="footer-brand">
                 <a href="#" class="logo">T-Hub</a>
-                <p>Decoding the future of technology, one byte at a time. Your source for automated tech news and deep insights.</p>
+                <p>Decoding the future of technology, one byte at a time. Your source for automated tech news and deep
+                    insights.</p>
             </div>
-            
+
             <div class="footer-links">
                 <h3 class="footer-title">Categories</h3>
                 <ul>
@@ -118,7 +125,7 @@
                 </form>
             </div>
         </div>
-        
+
         <div class="container">
             <div class="footer-bottom">
                 &copy; 2026 T-Hub Blog. All rights reserved. Powered by Automated AI Scraping.
@@ -134,11 +141,15 @@
                 <button class="clear-history" id="auth-switch">Need an account?</button>
             </div>
             <form id="auth-form" style="display:flex; flex-direction:column; gap:1rem;">
-                <input type="text" id="auth-username" placeholder="Username" required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
-                <input type="password" id="auth-password" placeholder="Password" required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
-                <button type="submit" class="read-more" style="width:100%; padding:1rem; border:none; cursor:pointer;">Continue</button>
+                <input type="text" id="auth-username" placeholder="Username" required
+                    style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
+                <input type="password" id="auth-password" placeholder="Password" required
+                    style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
+                <button type="submit" class="read-more"
+                    style="width:100%; padding:1rem; border:none; cursor:pointer;">Continue</button>
             </form>
-            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;" id="auth-close-btn">&times;</button>
+            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;"
+                id="auth-close-btn">&times;</button>
         </div>
     </div>
 
@@ -149,11 +160,15 @@
                 <h2>Publish a Story</h2>
             </div>
             <form id="post-form" style="display:flex; flex-direction:column; gap:1rem;">
-                <input type="text" id="post-title-in" placeholder="Story Title" required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
-                <textarea id="post-content-in" placeholder="Tell your story..." required style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px; height:200px; font-family:inherit;"></textarea>
-                <button type="submit" class="read-more" style="width:100%; padding:1rem; border:none; cursor:pointer;">Publish Now</button>
+                <input type="text" id="post-title-in" placeholder="Story Title" required
+                    style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px;">
+                <textarea id="post-content-in" placeholder="Tell your story..." required
+                    style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); padding:0.8rem; color:white; border-radius:4px; height:200px; font-family:inherit;"></textarea>
+                <button type="submit" class="read-more"
+                    style="width:100%; padding:1rem; border:none; cursor:pointer;">Publish Now</button>
             </form>
-            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;" id="post-close-btn">&times;</button>
+            <button class="drawer-close" style="position:static; margin-top:1rem; align-self: flex-end;"
+                id="post-close-btn">&times;</button>
         </div>
     </div>
     <script>
@@ -200,9 +215,9 @@
         // Dynamic Data Integration
         async function loadPosts() {
             try {
-                const response = await fetch(`${API_BASE}/posts`, {credentials: 'include'});
+                const response = await fetch(`${API_BASE}/posts`, { credentials: 'include' });
                 const posts = await response.json();
-                
+
                 let filtered = posts;
                 if (currentCategory !== 'All') {
                     filtered = posts.filter(p => p.category === currentCategory);
@@ -221,8 +236,8 @@
             posts.forEach(post => {
                 const card = document.createElement('article');
                 card.className = 'blog-card';
-                
-                const detailUrl = post.is_user_post ? `/post.html?id=${post.id}` : `/post.html?url=${encodeURIComponent(post.link)}`;
+
+                const detailUrl = post.is_user_post ? `post.html?id=${post.id}` : `post.html?url=${encodeURIComponent(post.link)}`;
 
                 card.innerHTML = `
                     <div class="blog-card-image">
@@ -304,7 +319,7 @@
                     mobileAuth.innerHTML = loginHTML;
                     postBtn.style.display = 'none';
                 }
-            } catch (e) {}
+            } catch (e) { }
         }
 
         // Open Auth (Sign In) - Robust Delegation
@@ -326,7 +341,7 @@
         };
 
         document.getElementById('auth-close-btn').onclick = () => authOverlay.classList.remove('active');
-        
+
         authSwitch.onclick = () => {
             isLogin = !isLogin;
             authTitle.textContent = isLogin ? "Sign In" : "Create Account";
@@ -338,7 +353,7 @@
             const endpoint = isLogin ? '/auth/login' : '/auth/register';
             const res = await fetch(API_BASE + endpoint, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     username: document.getElementById('auth-username').value,
                     password: document.getElementById('auth-password').value
@@ -360,7 +375,7 @@
         };
 
         window.logout = async () => {
-            await fetch(`${API_BASE}/auth/logout`, {method: 'POST'});
+            await fetch(`${API_BASE}/auth/logout`, { method: 'POST' });
             location.reload();
         };
 
@@ -371,7 +386,7 @@
             e.preventDefault();
             const res = await fetch(`${API_BASE}/posts/create`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     title: document.getElementById('post-title-in').value,
                     content: document.getElementById('post-content-in').value
@@ -389,8 +404,8 @@
             }
             const res = await fetch(`${API_BASE}/posts/like`, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({post_id: postId})
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ post_id: postId })
             });
             const data = await res.json();
             const countSpan = btn.querySelector('.like-count');
