@@ -199,6 +199,9 @@ def toggle_like():
     db.session.commit()
     return jsonify({"status": status, "count": post.likes_count})
 
+# Serve static files correctly on Vercel
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
 @app.route('/api/health')
 def health():
     return jsonify({
@@ -207,13 +210,19 @@ def health():
     })
 
 @app.route('/')
-def index():
-    return send_from_directory('../', 'index.html')
+@app.route('/index.html')
+def index_page():
+    return send_from_directory(ROOT_DIR, 'index.html')
+
+@app.route('/post.html')
+def post_page():
+    return send_from_directory(ROOT_DIR, 'post.html')
 
 @app.route('/<path:path>')
 def catch_all(path):
-    # Try to serve the file from the root directory
-    return send_from_directory('../', path)
+    return send_from_directory(ROOT_DIR, path)
+
+# Initialize Database safely
 try:
     with app.app_context():
         db.create_all()

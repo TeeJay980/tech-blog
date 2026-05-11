@@ -222,7 +222,7 @@
                 const card = document.createElement('article');
                 card.className = 'blog-card';
                 
-                const detailUrl = post.is_user_post ? `post.html?id=${post.id}` : `post.html?url=${encodeURIComponent(post.link)}`;
+                const detailUrl = post.is_user_post ? `/post.html?id=${post.id}` : `/post.html?url=${encodeURIComponent(post.link)}`;
 
                 card.innerHTML = `
                     <div class="blog-card-image">

@@ -145,26 +145,30 @@ def fetch_full_content_and_image(url):
         return None, None
 
 def extract_image(entry):
-    """Attempt to find a featured image in the feed entry."""
+    """Attempt to find a featured image in the feed entry with fallback logic."""
     # 1. Try media:content
     if 'media_content' in entry and len(entry.media_content) > 0:
-        content = entry.media_content[0]
-        if 'url' in content:
-            return content['url']
+        for media in entry.media_content:
+            if 'url' in media and ('.jpg' in media['url'] or '.png' in media['url'] or '.jpeg' in media['url']):
+                return media['url']
     
     # 2. Try media:thumbnail
     if 'media_thumbnail' in entry and len(entry.media_thumbnail) > 0:
-        thumb = entry.media_thumbnail[0]
-        if 'url' in thumb:
-            return thumb['url']
+        return entry.media_thumbnail[0]['url']
     
-    # 3. Try looking inside the summary/description for an <img> tag
+    # 3. Try enclosure (standard for many RSS feeds)
+    if 'enclosures' in entry and len(entry.enclosures) > 0:
+        for enc in entry.enclosures:
+            if 'href' in enc and ('image' in enc.get('type', '')):
+                return enc['href']
+
+    # 4. Try looking inside the summary/description for an <img> tag
     content = entry.get('summary', '') + entry.get('description', '')
     img_match = re.search(r'<img [^>]*src="([^"]+)"', content)
     if img_match:
         return img_match.group(1)
         
-    # 4. Fallback to placeholder
+    # 5. Last resort placeholder
     return "assets/placeholder.png"
 
 def scrape():
